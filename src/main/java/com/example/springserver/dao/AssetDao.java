@@ -11,6 +11,7 @@ import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 import com.example.springserver.pojo.Asset;
 import com.example.springserver.pojo.AssetGo;
@@ -33,6 +34,7 @@ import org.hyperledger.fabric.client.identity.Identity;
 import org.hyperledger.fabric.client.identity.X509Identity;
 import org.hyperledger.fabric.client.identity.Signer;
 import org.hyperledger.fabric.client.identity.Signers;
+import org.hyperledger.fabric.protos.gateway.ErrorDetail;
 
 import io.grpc.ManagedChannel;
 import io.grpc.netty.shaded.io.grpc.netty.GrpcSslContexts;
@@ -159,6 +161,80 @@ public class AssetDao {
 			assets[i]=assetGos[i].toAsset();
 		}
 		return assets;
+	}
+
+	public String createNewAsset(Asset asset){
+		try{
+			log.info("--> Submit Transaction: CreateAsset, creates new asset with ID, Color, Size, Owner and AppraisedValue arguments");
+			contract.submitTransaction("CreateAsset", asset.getId(), asset.getName(), asset.getCount(), asset.getOwner());
+			//contract.submitTransaction("createAsset",asset.getId());
+			return asset.getId();
+		} catch(GatewayException|CommitException ge) {
+			log.error("error create asset");
+			ge.printStackTrace();
+		} 
+		return null;
+	}
+
+	public Asset readAssetById(String assetId){
+		try {
+			log.info("\n--> Evaluate Transaction: ReadAsset, function returns asset attributes");
+		
+			byte[] evaluateResult = contract.evaluateTransaction("ReadAsset", assetId);
+			String stringResult = new String(evaluateResult,StandardCharsets.UTF_8);
+			AssetGo resultGo = gson.fromJson(stringResult, AssetGo.class);
+			Asset result = resultGo.toAsset();
+		
+			log.info("*** Result:" + prettyJson(evaluateResult));
+
+			return result;
+		} catch (Exception e) {
+			log.error("error read asset");
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void updateNonExistentAsset(Asset asset) {
+		try {
+			log.info("\n--> Submit Transaction: UpdateAsset asset70, asset70 does not exist and should return an error");
+			
+			contract.submitTransaction("UpdateAsset", asset.getId(), asset.getName(), asset.getCount(), asset.getOwner());
+			
+			log.info("******** FAILED to return an error");
+		} catch (EndorseException | SubmitException | CommitStatusException e) {
+			log.info("*** Successfully caught the error: ");
+			e.printStackTrace(System.out);
+			log.info("Transaction ID: " + e.getTransactionId());
+
+			List<ErrorDetail> details = e.getDetails();
+			if (!details.isEmpty()) {
+				System.out.println("Error Details:");
+				for (ErrorDetail detail : details) {
+					System.out.println("- address: " + detail.getAddress() + ", mspId: " + detail.getMspId()
+							+ ", message: " + detail.getMessage());
+				}
+			}
+		} catch (CommitException e) {
+			log.info("*** Successfully caught the error: " + e);
+			e.printStackTrace(System.out);
+			log.info("Transaction ID: " + e.getTransactionId());
+			log.info("Status code: " + e.getCode());
+		}
+	}
+
+	public void deleteAssetById(String assetId){
+		try {
+			log.info("\n--> Evaluate Transaction: DeleteAsset, function returns asset attributes");
+		
+			byte[] evaluateResult = contract.evaluateTransaction("DeleteAsset", assetId);
+			
+			log.info("*** Result:" + prettyJson(evaluateResult));
+		} catch (Exception e) {
+			log.error("error delete asset");
+			e.printStackTrace();
+		}
+		
 	}
 
 	private String prettyJson(final byte[] json) {

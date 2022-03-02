@@ -15,4 +15,19 @@ public class SpringServerService {
         return assetDao.getAllAssets();
     }
     
+    public String createAsset(Asset asset) {
+        return assetDao.createNewAsset(asset);
+    }
+    
+    public Asset readAsset(String id) {
+        return assetDao.readAssetById(id);
+    }
+
+    public void updateAsset(Asset asset) {
+        assetDao.updateNonExistentAsset(asset);
+    }
+
+    public void deleteAsset(String id) {
+        assetDao.deleteAssetById(id);
+    }
 }
