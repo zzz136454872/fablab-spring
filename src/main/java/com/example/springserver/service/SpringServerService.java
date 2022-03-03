@@ -15,7 +15,7 @@ public class SpringServerService {
         return assetDao.getAllAssets();
     }
     
-    public String createAsset(Asset asset) {
+    public Boolean createAsset(Asset asset) {
         return assetDao.createNewAsset(asset);
     }
     
@@ -23,11 +23,11 @@ public class SpringServerService {
         return assetDao.readAssetById(id);
     }
 
-    public void updateAsset(Asset asset) {
-        assetDao.updateNonExistentAsset(asset);
+    public Boolean updateAsset(Asset asset) {
+        return assetDao.updateAsset(asset);
     }
 
-    public void deleteAsset(String id) {
-        assetDao.deleteAssetById(id);
+    public Boolean deleteAsset(String id) {
+        return assetDao.deleteAssetById(id);
     }
 }

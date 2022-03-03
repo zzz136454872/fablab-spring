@@ -4,12 +4,12 @@ import com.example.springserver.pojo.Asset;
 import com.example.springserver.service.SpringServerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
@@ -29,25 +29,36 @@ public class Controller {
     }
 
     @PostMapping("create")
-    public ResponseEntity<String> createAsset(@RequestBody Asset asset) throws Exception {
+    public ResponseEntity<Void> createAsset(@RequestBody Asset asset) throws Exception {
         //return springServerService.createAsset(asset);
-        return new ResponseEntity<String>(springServerService.createAsset(asset),HttpStatus.OK);
+        if(springServerService.createAsset(asset)) 
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/{assetId}")
-    public ResponseEntity<Asset> createAsset(@PathVariable("assetId") String id) throws Exception {
-        return new ResponseEntity<Asset>(springServerService.readAsset(id),HttpStatus.OK);
+    @GetMapping("/read/{assetId}")
+    public ResponseEntity<Asset> readAsset(@PathVariable("assetId") String id) throws Exception {
+        Asset asset=springServerService.readAsset(id);
+        if(asset!=null) 
+            return new ResponseEntity<Asset>(asset,HttpStatus.OK);
+        else
+            return new ResponseEntity<Asset>(asset,HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("update")
     public ResponseEntity<Void> updateAsset(@RequestBody Asset asset) throws Exception {
-        springServerService.updateAsset(asset);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if(springServerService.updateAsset(asset)) 
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/{assetId}")
+    @GetMapping("/delete/{assetId}")
     public ResponseEntity<Void> deleteAsset(@PathVariable("assetId") String id) throws Exception {
-        springServerService.deleteAsset(id);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        if (springServerService.deleteAsset(id))
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
