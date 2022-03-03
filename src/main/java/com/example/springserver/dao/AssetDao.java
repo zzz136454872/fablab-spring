@@ -230,7 +230,7 @@ public class AssetDao {
 		try {
 			// log.info("\n--> Evaluate Transaction: DeleteAsset, function returns asset attributes");
 		
-		    byte[] evaluateResult = contract.evaluateTransaction("DeleteAsset", assetId);
+		    byte[] evaluateResult = contract.submitTransaction("DeleteAsset", assetId);
 			
 			log.info("*** Result:" + prettyJson(evaluateResult));
 		} catch (Exception e) {
