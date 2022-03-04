@@ -84,8 +84,7 @@ public class AssetDao {
 
 			// Get the smart contract from the network.
 			contract = network.getContract(chaincodeName);
-			log.info("new assetdao");
-			initLedger();
+			// log.info("new assetdao");
 		} catch(Exception e)
 		{
 			e.printStackTrace();
@@ -134,12 +133,16 @@ public class AssetDao {
 	 * the first time it was started after its initial deployment. A new version of
 	 * the chaincode deployed later would likely not need to run an "init" function.
 	 */
-	private void initLedger() throws EndorseException, SubmitException, CommitStatusException, CommitException {
-		log.info("--> Submit Transaction: InitLedger, function creates the initial set of assets on the ledger");
-
-		contract.submitTransaction("InitLedger");
-
-		log.info("*** Transaction committed successfully");
+	public Boolean initLedger() {
+		try {
+			log.info("--> Submit Transaction: InitLedger, function creates the initial set of assets on the ledger");
+			contract.submitTransaction("InitLedger");
+			log.info("*** Transaction committed successfully");
+		} catch (EndorseException|SubmitException|CommitStatusException|CommitException e) {
+			log.info("init ledger failed");
+			return false;
+		}
+		return true;
 	}
 
 	public Asset[] getAllAssets(){

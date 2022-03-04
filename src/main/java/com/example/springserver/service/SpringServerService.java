@@ -38,4 +38,8 @@ public class SpringServerService {
         }
         return temp;
     }
+
+    public Boolean addTestData() {
+        return assetDao.initLedger();
+    }
 }

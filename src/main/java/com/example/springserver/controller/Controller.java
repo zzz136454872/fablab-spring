@@ -22,17 +22,26 @@ public class Controller {
     @Autowired
     private SpringServerService springServerService;
 
-    @GetMapping("hello")
+    @GetMapping("/hello")
     public String hello() {
         return "hello world";
     }
 
-    @GetMapping("list")
+
+    @GetMapping("/list")
     public Asset[] listAsset() {
         return springServerService.listAsset();
     }
 
-    @PostMapping("create")
+    @GetMapping("/addTestData")
+    public ResponseEntity<Void> addTestData() {
+        if(springServerService.addTestData()) 
+            return new ResponseEntity<>(HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping("/create")
     public ResponseEntity<Void> createAsset(@RequestBody Asset asset) throws Exception {
         //return springServerService.createAsset(asset);
         if(springServerService.createAsset(asset)) 
@@ -50,7 +59,7 @@ public class Controller {
             return new ResponseEntity<Asset>(asset,HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("update")
+    @PostMapping("/update")
     public ResponseEntity<Void> updateAsset(@RequestBody Asset asset) throws Exception {
         if(springServerService.updateAsset(asset)) 
             return new ResponseEntity<>(HttpStatus.OK);
