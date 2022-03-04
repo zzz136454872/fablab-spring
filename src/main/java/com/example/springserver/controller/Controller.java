@@ -1,9 +1,12 @@
 package com.example.springserver.controller;
 
+import java.util.List;
+
 import com.example.springserver.pojo.Asset;
 import com.example.springserver.service.SpringServerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 @RestController
+@CrossOrigin(origins = {"http://127.0.0.1:3000","http://localhost:3000"})
 public class Controller {
     @Autowired
     private SpringServerService springServerService;
@@ -54,9 +58,9 @@ public class Controller {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/delete/{assetId}")
-    public ResponseEntity<Void> deleteAsset(@PathVariable("assetId") String id) throws Exception {
-        if (springServerService.deleteAsset(id))
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deleteAsset(@RequestBody List<String>  id_list) throws Exception {
+        if (springServerService.deleteAssets(id_list))
             return new ResponseEntity<Void>(HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

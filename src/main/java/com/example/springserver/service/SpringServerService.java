@@ -1,4 +1,6 @@
 package com.example.springserver.service;
+import java.util.List;
+
 import com.example.springserver.dao.AssetDao;
 import com.example.springserver.pojo.Asset;
 
@@ -27,7 +29,13 @@ public class SpringServerService {
         return assetDao.updateAsset(asset);
     }
 
-    public Boolean deleteAsset(String id) {
-        return assetDao.deleteAssetById(id);
+    public Boolean deleteAssets(List<String> id_list) {
+        Boolean temp = true;
+        for(String id : id_list){
+            if(!assetDao.deleteAssetById(id)){
+                temp = false;
+            }
+        }
+        return temp;
     }
 }
