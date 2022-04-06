@@ -67,11 +67,6 @@ public class Controller {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<Void> deleteAsset(@RequestBody List<String>  id_list) throws Exception {
-        if (springServerService.deleteAssets(id_list))
-            return new ResponseEntity<Void>(HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    // write your deleteAsset method and mapping here
+
 }

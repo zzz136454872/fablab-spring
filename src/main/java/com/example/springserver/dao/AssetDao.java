@@ -181,22 +181,8 @@ public class AssetDao {
 	}
 
 	public Asset readAssetById(String assetId){
-		try {
-			log.info("\n--> Evaluate Transaction: ReadAsset, function returns asset attributes");
-		
-			byte[] evaluateResult = contract.evaluateTransaction("ReadAsset", assetId);
-			String stringResult = new String(evaluateResult,StandardCharsets.UTF_8);
-			AssetGo resultGo = gson.fromJson(stringResult, AssetGo.class);
-			Asset result = resultGo.toAsset();
-		
-			log.info("*** Result:" + prettyJson(evaluateResult));
-
-			return result;
-		} catch (Exception e) {
-			log.error("error read asset");
-			e.printStackTrace();
-			return null;
-		}
+		// write your code here.
+		return null;
 	}
 
 	public Boolean updateAssetInfo(Asset asset) {
@@ -230,17 +216,7 @@ public class AssetDao {
 	}
 
 	public Boolean deleteAssetById(String assetId){
-		try {
-			// log.info("\n--> Evaluate Transaction: DeleteAsset, function returns asset attributes");
-		
-		    byte[] evaluateResult = contract.submitTransaction("DeleteAsset", assetId);
-			
-			log.info("*** Result:" + prettyJson(evaluateResult));
-		} catch (Exception e) {
-			// log.error("error delete asset");
-			e.printStackTrace();
-			return false;
-		}
+		// write your code here.
 		return true;
 	}
 

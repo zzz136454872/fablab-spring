@@ -30,13 +30,8 @@ public class SpringServerService {
     }
 
     public Boolean deleteAssets(List<String> id_list) {
-        Boolean temp = true;
-        for(String id : id_list){
-            if(!assetDao.deleteAssetById(id)){
-                temp = false;
-            }
-        }
-        return temp;
+        // write your code here. 
+        return true;
     }
 
     public Boolean addTestData() {
