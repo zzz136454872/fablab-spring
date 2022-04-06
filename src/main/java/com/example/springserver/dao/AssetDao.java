@@ -199,7 +199,7 @@ public class AssetDao {
 		}
 	}
 
-	public Boolean updateAsset(Asset asset) {
+	public Boolean updateAssetInfo(Asset asset) {
 		try {
 			// log.info("\n--> Submit Transaction: UpdateAsset asset70, asset70 does not exist and should return an error");
 			

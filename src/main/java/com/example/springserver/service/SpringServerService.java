@@ -26,7 +26,7 @@ public class SpringServerService {
     }
 
     public Boolean updateAsset(Asset asset) {
-        return assetDao.updateAsset(asset);
+        return assetDao.updateAssetInfo(asset);
     }
 
     public Boolean deleteAssets(List<String> id_list) {
